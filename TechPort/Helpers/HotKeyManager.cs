@@ -12,7 +12,7 @@ namespace TechPort.Helpers
         public static int RegisterHotKey(Keys key, KeyModifiers modifiers)
         {
             _windowReadyEvent.WaitOne();
-            int id = System.Threading.Interlocked.Increment(ref _id);
+            int id = Interlocked.Increment(ref _id);
             _wnd.Invoke(new RegisterHotKeyDelegate(RegisterHotKeyInternal), _hwnd, id, (uint)modifiers, (uint)key);
             return id;
         }
