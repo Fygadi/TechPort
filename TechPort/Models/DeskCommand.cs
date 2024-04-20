@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using TechPort.Helpers;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Storage.Streams;
-using Console = TechPort.Helpers.Console;
 
 namespace TechPort.Models
 {
@@ -19,9 +13,9 @@ namespace TechPort.Models
         const string UUID_HEIGHT = "99fa0021-338a-1024-8a49-009c0215f78a";
         const string UUID_COMMAND = "99fa0002-338a-1024-8a49-009c0215f78a";
 
-        static readonly byte[] COMMAND_UP = new byte[] { 0x47, 0x00 };
-        static readonly byte[] COMMAND_DOWN = new byte[] { 0x46, 0x00 };
-        static readonly byte[] COMMAND_STOP = new byte[] { 0xFF, 0x00 };
+        static readonly byte[] COMMAND_UP =  { 0x47, 0x00 };
+        static readonly byte[] COMMAND_DOWN =  { 0x46, 0x00 };
+        static readonly byte[] COMMAND_STOP = { 0xFF, 0x00 };
 
         public async Task<bool> MoveUpAsync()
         {
@@ -57,10 +51,8 @@ namespace TechPort.Models
             return 0;
         }
 
-
-
-
-
+        public short GetSpeed(UInt32 data) => GetHeightAndSpeed(data).Item1;
+        public UInt32 GetHeight(UInt32 data) => GetHeightAndSpeed(data).Item2;
         public static (short, UInt32) GetHeightAndSpeed(UInt32 data)
         {
             short speed = (short)(data >> 16);
@@ -68,17 +60,5 @@ namespace TechPort.Models
 
             return (speed, height);
         }
-
-        public short GetSpeed(UInt32 data)
-        {
-            var (speed, height) = GetHeightAndSpeed(data);
-        }
-
-        public UInt32 GetHeight(UInt32 data)
-        {
-            var (speed, height) = GetHeightAndSpeed(data);
-        }
-
-
     }
 }

@@ -168,12 +168,12 @@ namespace TechPort
                 if (e.Key == Keys.Up)
                 {
                     Console.WriteLine("UP!", InformationType.Success);
-                    _ = MoveDesk(COMMAND_UP);
+                    MoveUP();
                 }
                 else if (e.Key == Keys.Down)
                 {
                     Console.WriteLine("DOWN!", InformationType.Success);
-                    _ = MoveDown();
+                    MoveDown();
                 }
                 else if (e.Key == Keys.Left)
                 {
@@ -189,10 +189,12 @@ namespace TechPort
         {
             _ = MoveDesk(COMMAND_UP);
         }
+        
         static private void MoveDown()
         {
             _ = MoveDesk(COMMAND_DOWN);
         }
+        
         static private async Task MoveDesk(byte[] command)
         {
             var c = GetCommandCharacteristic(UUID_COMMAND);
@@ -212,7 +214,7 @@ namespace TechPort
             else
                 Console.WriteLine("Failed to wrote to device", InformationType.Error);
         }
-
+        
         static private async Task sendCommand(byte[] command)
         {
             GattCharacteristic c = G_characteristics.FirstOrDefault(characteristic => characteristic.Uuid.ToString() == UUID_COMMAND);
@@ -231,6 +233,7 @@ namespace TechPort
             else
                 Console.WriteLine("Failed to wrote to device", InformationType.Error);
         }
+        
         private static GattCharacteristic GetCommandCharacteristic(string command)
         {
             GattCharacteristic c = G_characteristics.FirstOrDefault(characteristic => characteristic.Uuid.ToString() == command);
