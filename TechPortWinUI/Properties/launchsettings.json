@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "TechPortWinUI (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "TechPortWinUI (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

@@ -10,11 +10,11 @@ namespace TechPort.Helpers
     //reference https://learn.microsoft.com/en-us/windows/uwp/devices-sensors/gatt-client
     public class Bluetooth
     {
-        static string aqsAllBluetoothLEDevices = BluetoothLEDevice.GetDeviceSelectorFromAppearance(
+        static readonly string aqsAllBluetoothLEDevices = BluetoothLEDevice.GetDeviceSelectorFromAppearance(
                 BluetoothLEAppearance.FromParts(
                     BluetoothLEAppearanceCategories.Uncategorized,
                     BluetoothLEAppearanceSubcategories.Generic));
-        static string[] requestedProperties = { "System.Devices.Aep.DeviceAddress", };
+        static readonly string[] requestedProperties = { "System.Devices.Aep.DeviceAddress", };
         static DeviceWatcher deviceWatcher = null;
 
         DeviceInformation deviceInformation = null;
@@ -108,67 +108,5 @@ namespace TechPort.Helpers
             deviceWatcher.Stop();
         }
         #endregion
-
-        public async Task GetGattCharacteristicsFromBluetoothLEDeviceAsync()
-        {
-            /*
-            GattDeviceServicesResult services = await bluetoothLeDevice.GetGattServicesAsync();
-
-            Console.ConsoleWriteLine(services.Status, InformationType.Success);
-
-            if (services.Status == GattCommunicationStatus.Success)
-            {
-                foreach (var service in services.Services)
-                {
-                    ConsoleWriteLine(service.Uuid);
-                    ConsoleNewLine(0);
-
-                    GattCharacteristicsResult characteristicResult = await service.GetCharacteristicsAsync(BluetoothCacheMode.Cached);
-
-                    if (characteristicResult.Status == GattCommunicationStatus.Success)
-                    {
-                        var characteristics = characteristicResult.Characteristics;
-                        for (int i = 0; i < characteristics.Count; i++)
-                        {
-                            var characteristic = characteristics[i];
-                            G_characteristics.Add(characteristic);
-
-                            GattCharacteristicProperties properties = characteristic.CharacteristicProperties;
-
-                            ConsoleWrite($"  * ", InformationType.AdditionalInformation);
-                            ConsoleWrite($"{characteristic.Uuid}    ", InformationType.Information);
-
-                            if (properties.HasFlag(GattCharacteristicProperties.Read))
-                            {
-                                ConsoleWrite("* Reading ");
-                            }
-                            else ConsoleWrite("*         ");
-
-                            if (properties.HasFlag(GattCharacteristicProperties.Write))
-                            {
-                                // This characteristic supports writing to it.
-                                ConsoleWrite(" Writing ");
-                            }
-                            else ConsoleWrite("         ");
-
-                            if (properties.HasFlag(GattCharacteristicProperties.Notify))
-                            {
-                                //GattCommunicationStatus status = await
-                                //    characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                                //if (status == GattCommunicationStatus.Success)
-                                //    characteristic.ValueChanged += Characteristic_ValueChanged;
-
-                                ConsoleWrite(" Notify *");
-                            }
-                            else ConsoleWrite("        *");
-
-                            ConsoleNewLine();
-                        }
-                    }
-                }
-                ConsoleNewLine(3);
-            }
-            */
-        }
     }
 }

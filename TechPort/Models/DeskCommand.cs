@@ -7,8 +7,8 @@ namespace TechPort.Models
 {
     public class DeskCommand
     {
-        static double MIN_HEIGHT = 0.62; //Minimum desk height in meters
-        static double MAX_HEIGHT = 1.27; //Maximum desk height in meters
+        const double MIN_HEIGHT = 0.62; //Minimum desk height in meters
+        const double MAX_HEIGHT = 1.27; //Maximum desk height in meters
 
         const string UUID_HEIGHT = "99fa0021-338a-1024-8a49-009c0215f78a";
         const string UUID_COMMAND = "99fa0002-338a-1024-8a49-009c0215f78a";
