@@ -7,20 +7,338 @@
     Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="48" />
+            <RowDefinition Height="32" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock
+        <!--  TitleBar  -->
+        <StackPanel
             Grid.Row="0"
-            x:Uid="Main_Title"
-            Style="{StaticResource PageTitleStyle}" />
+            Grid.Column="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="#202020"
+            Orientation="Horizontal">
+            <Grid Padding="5">
+                <Image
+                    Margin="0,0,20,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Source="C:\Users\Fygadi\Documents\Krita\Vector\TechPort.svg" />
+            </Grid>
 
-        <Grid Grid.Row="1">
-            
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="22"
+                Text="TechPort" />
+        </StackPanel>
+
+        <!--  Content Section  -->
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            Padding="30,20"
+            Background="#121212">
+            <Grid.ColumnDefinitions>
+                <!--  height preset width  -->
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="2.5*" />
+            </Grid.ColumnDefinitions>
+            <!--  Height Preset Section  -->
+            <Grid Grid.Column="0" Background="#1d1d1d">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="10" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,20,0,0"
+                    FontSize="25"
+                    FontWeight="Bold"
+                    Foreground="#7943be"
+                    Text="Height Preset"
+                    TextAlignment="Center" />
+
+                <!--  Preset Height 1  -->
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="20,20,20,0"
+                    Background="#242325"
+                    Orientation="Horizontal">
+
+                    <!--  height text  -->
+                    <StackPanel
+                        Margin="12,0,22,0"
+                        Padding="5,8"
+                        VerticalAlignment="Center"
+                        Background="#d9d9d9">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="75cm" />
+                    </StackPanel>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Foreground="#d9d9d9"
+                        Text="Victor Assis" />
+                </StackPanel>
+
+                <!--  Preset Height 2  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Margin="20,20,20,0"
+                    Background="#242325"
+                    Orientation="Horizontal">
+
+                    <!--  height text  -->
+                    <StackPanel
+                        Margin="12,0,22,0"
+                        Padding="5,8"
+                        VerticalAlignment="Center"
+                        Background="#d9d9d9">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="82cm" />
+                    </StackPanel>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Foreground="#d9d9d9"
+                        Text="Victor Assis" />
+                </StackPanel>
+
+                <!--  Preset Height 3  -->
+                <StackPanel
+                    Grid.Row="3"
+                    Margin="20,20,20,0"
+                    Background="#242325"
+                    Orientation="Horizontal">
+
+                    <!--  height text  -->
+                    <StackPanel
+                        Margin="12,0,22,0"
+                        Padding="5,8"
+                        VerticalAlignment="Center"
+                        Background="#d9d9d9">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="82cm" />
+                    </StackPanel>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Foreground="#d9d9d9"
+                        Text="Victor Assis" />
+                </StackPanel>
+
+                <!--  Preset Height 4  -->
+                <StackPanel
+                    Grid.Row="4"
+                    Margin="20,20,20,0"
+                    Background="#242325"
+                    Orientation="Horizontal">
+
+                    <!--  height text  -->
+                    <StackPanel
+                        Margin="12,0,22,0"
+                        Padding="5,8"
+                        VerticalAlignment="Center"
+                        Background="#d9d9d9">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="82cm" />
+                    </StackPanel>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Foreground="#d9d9d9"
+                        Text="Victor Assis" />
+                </StackPanel>
+
+                <!--  Preset Height 5  -->
+                <StackPanel
+                    Grid.Row="5"
+                    Margin="20,20,20,0"
+                    Background="#242325"
+                    Orientation="Horizontal">
+
+                    <!--  height text  -->
+                    <StackPanel
+                        Margin="12,0,22,0"
+                        Padding="5,8"
+                        VerticalAlignment="Center"
+                        Background="#d9d9d9">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="82cm" />
+                    </StackPanel>
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Foreground="#d9d9d9"
+                        Text="Victor Assis" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Right Column  -->
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1.7*" />
+                    <RowDefinition Height="0.7*" />
+                    <RowDefinition Height="0.7*" />
+                </Grid.RowDefinitions>
+
+                <!--  Bluetooth Device  -->
+                <StackPanel
+                    Padding="20"
+                    VerticalAlignment="Top"
+                    Background="#1d1d1d"
+                    Orientation="Horizontal">
+                    <Image
+                        Height="48"
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Source="C:\Users\Fygadi\Downloads\Figma\computer-furniture-table.svg" />
+
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="24" Text="Bureau a Victor" />
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse
+                                Width="12"
+                                Height="12"
+                                Margin="0,0,15,0"
+                                Fill="#6ccb5f" />
+                            <TextBlock Text=" Connected" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--  Move Up and down  -->
+                <Grid
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Text Height  -->
+                    <TextBlock
+                        Grid.Column="0"
+                        Margin="0,0,35,0"
+                        VerticalAlignment="Center"
+                        FontSize="24">
+                        Height:<LineBreak />
+                        122cm</TextBlock>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="top"
+                        Orientation="Vertical">
+
+                        <!--  Move Up  -->
+                        <Button
+                            x:Name="MoveUpButton"
+                            Width="78"
+                            Height="78"
+                            Margin="0,0,0,15"
+                            Background="#d9d9d9"
+                            Click="MoveUpButton_Click">
+
+                            <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronUp.svg" Stretch="Uniform" />
+                        </Button>
+                        <!--  Move Down  -->
+                        <Button
+                            x:Name="MoveDownButton"
+                            Width="78"
+                            Height="78"
+                            Margin="0,0,0,15"
+                            Background="#d9d9d9">
+                            <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronDown.svg" Stretch="Uniform" />
+                        </Button>
+                    </StackPanel>
+
+                </Grid>
+
+                <!--  Control  -->
+                <Grid
+                    Grid.Row="2"
+                    Margin="0,0,0,10"
+                    Background="#1d1d1d">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="22"
+                        FontWeight="Bold"
+                        Foreground="#7943be"
+                        Text="Control" />
+                    <Image
+                        Grid.Row="1"
+                        Margin="0,10"
+                        Source="C:\Users\Fygadi\Downloads\Figma\ChevronUpDown.svg" />
+                </Grid>
+
+                <!--  Settings  -->
+                <Grid
+                    Grid.Row="3"
+                    Margin="0,10,0,0"
+                    Background="#1d1d1d">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="22"
+                        FontWeight="Bold"
+                        Foreground="#7943be"
+                        Text="Control" />
+                    <Image
+                        Grid.Row="1"
+                        Margin="0,10"
+                        Source="C:\Users\Fygadi\Downloads\Figma\Settings.svg" />
+                </Grid>
+            </Grid>
         </Grid>
-        
+
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using TechPortWinUI.Helpers;
+﻿using Microsoft.UI.Xaml;
+using TechPortWinUI.Helpers;
 
 using Windows.UI.ViewManagement;
 
@@ -15,6 +16,9 @@ public sealed partial class MainWindow : WindowEx
         InitializeComponent();
 
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets/WindowIcon.ico"));
+
+        AppWindow.SetIcon(@"C:\Users\Fygadi\Documents\Krita\Vector\TechPort.ico");
+
         Content = null;
         Title = "AppDisplayName".GetLocalized();
 
