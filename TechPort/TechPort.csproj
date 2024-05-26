@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Desk\IdasenDesk.cs" />
+    <Compile Include="Desk\IDesk.cs" />
     <Compile Include="Helpers\Bluetooth.cs" />
     <Compile Include="Helpers\Console.cs" />
     <Compile Include="Helpers\HotKeyManager.cs" />

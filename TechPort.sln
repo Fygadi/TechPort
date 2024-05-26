@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechPortWinUI", "TechPortWi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechPortWinUI.Core", "TechPortWinUI.Core\TechPortWinUI.Core.csproj", "{E1E310E9-61EE-4265-A35C-753CDBEAE5FD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C03CE7B3-5BA6-4789-B68B-774DA3F4FBCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -19,9 +19,9 @@ namespace TechPort
     {
         private static readonly List<GattCharacteristic> G_characteristics = new List<GattCharacteristic>();
 
-        static double MIN_HEIGHT = 0.62; //Minimum desk height in meters
-        static double MAX_HEIGHT = 1.27; //Maximum desk height in meters
-        static int RETTYCOUNT = 3; //Number of retry on bluetooth connect
+        const double MIN_HEIGHT = 0.62; //Minimum desk height in meters
+        const double MAX_HEIGHT = 1.27; //Maximum desk height in meters
+        const int RETRYCOUNT = 3; //Number of retry on bluetooth connect
 
         const string UUID_HEIGHT = "99fa0021-338a-1024-8a49-009c0215f78a";
         const string UUID_COMMAND = "99fa0002-338a-1024-8a49-009c0215f78a";

@@ -44,164 +44,110 @@
             <Grid.ColumnDefinitions>
                 <!--  height preset width  -->
                 <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="2.5*" />
             </Grid.ColumnDefinitions>
+
             <!--  Height Preset Section  -->
             <Grid Grid.Column="0" Background="#1d1d1d">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="64" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="10" />
                 </Grid.RowDefinitions>
 
                 <TextBlock
                     Grid.Row="0"
-                    Margin="0,20,0,0"
-                    FontSize="25"
+                    Margin="0,20,0,20"
+                    HorizontalAlignment="Center"
+                    FontSize="26"
                     FontWeight="Bold"
                     Foreground="#7943be"
-                    Text="Height Preset"
-                    TextAlignment="Center" />
+                    Text="Height Preset" />
 
-                <!--  Preset Height 1  -->
-                <StackPanel
+                <ListView
+                    x:Name="MyCustumListViewTest"
                     Grid.Row="1"
-                    Margin="20,20,20,0"
-                    Background="#242325"
-                    Orientation="Horizontal">
+                    AllowDrop="True"
+                    CanReorderItems="True"
+                    DataContext="{Binding _presetModel}"
+                    ItemsSource="{Binding Presets}"
+                    SelectionMode="Single">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="20,5" />
+                            <Setter Property="Padding" Value="10,34" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Background" Value="#242325" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
 
-                    <!--  height text  -->
-                    <StackPanel
-                        Margin="12,0,22,0"
-                        Padding="5,8"
-                        VerticalAlignment="Center"
-                        Background="#d9d9d9">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            Foreground="Black"
-                            Text="75cm" />
-                    </StackPanel>
 
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Foreground="#d9d9d9"
-                        Text="Victor Assis" />
-                </StackPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Margin="0"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left">
 
-                <!--  Preset Height 2  -->
-                <StackPanel
-                    Grid.Row="2"
-                    Margin="20,20,20,0"
-                    Background="#242325"
-                    Orientation="Horizontal">
+                                <Button.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Edit" />
+                                        <MenuFlyoutItem Command="{Binding DeletPresetCommand}" Text="Delete" />
+                                    </MenuFlyout>
+                                </Button.ContextFlyout>
+                                <StackPanel Padding="25" Orientation="Horizontal">
+                                    <!--  Prest height value  -->
+                                    <StackPanel
+                                        Margin="0,0,22,0"
+                                        Padding="5,8"
+                                        VerticalAlignment="Center"
+                                        Background="#d9d9d9">
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontSize="18"
+                                            Foreground="Black"
+                                            Text="{Binding Height}" />
+                                    </StackPanel>
 
-                    <!--  height text  -->
-                    <StackPanel
-                        Margin="12,0,22,0"
-                        Padding="5,8"
-                        VerticalAlignment="Center"
-                        Background="#d9d9d9">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            Foreground="Black"
-                            Text="82cm" />
-                    </StackPanel>
+                                    <!--  Preset Name  -->
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="22"
+                                        Foreground="#d9d9d9"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Foreground="#d9d9d9"
-                        Text="Victor Assis" />
-                </StackPanel>
 
-                <!--  Preset Height 3  -->
-                <StackPanel
-                    Grid.Row="3"
-                    Margin="20,20,20,0"
-                    Background="#242325"
-                    Orientation="Horizontal">
+                    <!--  Preset Height 1  -->
+                    <!--
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel
+                                Margin="12,0,22,0"
+                                Padding="5,8"
+                                VerticalAlignment="Center"
+                                Background="#d9d9d9">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="82cm" />
+                            </StackPanel>
 
-                    <!--  height text  -->
-                    <StackPanel
-                        Margin="12,0,22,0"
-                        Padding="5,8"
-                        VerticalAlignment="Center"
-                        Background="#d9d9d9">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            Foreground="Black"
-                            Text="82cm" />
-                    </StackPanel>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="22"
+                                Foreground="#d9d9d9"
+                                Text="Victor Assis" />
+                        </StackPanel>
+                    </ListViewItem>-->
 
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Foreground="#d9d9d9"
-                        Text="Victor Assis" />
-                </StackPanel>
-
-                <!--  Preset Height 4  -->
-                <StackPanel
-                    Grid.Row="4"
-                    Margin="20,20,20,0"
-                    Background="#242325"
-                    Orientation="Horizontal">
-
-                    <!--  height text  -->
-                    <StackPanel
-                        Margin="12,0,22,0"
-                        Padding="5,8"
-                        VerticalAlignment="Center"
-                        Background="#d9d9d9">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            Foreground="Black"
-                            Text="82cm" />
-                    </StackPanel>
-
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Foreground="#d9d9d9"
-                        Text="Victor Assis" />
-                </StackPanel>
-
-                <!--  Preset Height 5  -->
-                <StackPanel
-                    Grid.Row="5"
-                    Margin="20,20,20,0"
-                    Background="#242325"
-                    Orientation="Horizontal">
-
-                    <!--  height text  -->
-                    <StackPanel
-                        Margin="12,0,22,0"
-                        Padding="5,8"
-                        VerticalAlignment="Center"
-                        Background="#d9d9d9">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            Foreground="Black"
-                            Text="82cm" />
-                    </StackPanel>
-
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Foreground="#d9d9d9"
-                        Text="Victor Assis" />
-                </StackPanel>
+                </ListView>
             </Grid>
 
             <!--  Right Column  -->
@@ -261,7 +207,7 @@
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
-                        VerticalAlignment="top"
+                        VerticalAlignment="Center"
                         Orientation="Vertical">
 
                         <!--  Move Up  -->
@@ -271,7 +217,9 @@
                             Height="78"
                             Margin="0,0,0,15"
                             Background="#d9d9d9"
-                            Click="MoveUpButton_Click">
+                            PointerCanceled="MoveUpButton_PointerCanceled"
+                            PointerPressed="MoveUpButton_PointerPressed"
+                            PointerReleased="MoveUpButton_PointerReleased">
 
                             <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronUp.svg" Stretch="Uniform" />
                         </Button>
@@ -280,8 +228,10 @@
                             x:Name="MoveDownButton"
                             Width="78"
                             Height="78"
-                            Margin="0,0,0,15"
-                            Background="#d9d9d9">
+                            Background="#d9d9d9"
+                            PointerCanceled="MoveDownButton_PointerCanceled"
+                            PointerPressed="MoveDownButton_PointerPressed"
+                            PointerReleased="MoveDownButton_PointerReleased">
                             <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronDown.svg" Stretch="Uniform" />
                         </Button>
                     </StackPanel>
@@ -298,7 +248,6 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-
                     <TextBlock
                         Grid.Row="0"
                         Margin="0,20,0,0"
@@ -331,7 +280,7 @@
                         FontSize="22"
                         FontWeight="Bold"
                         Foreground="#7943be"
-                        Text="Control" />
+                        Text="Settings" />
                     <Image
                         Grid.Row="1"
                         Margin="0,10"

@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Amelie Assis",
+    "Height":  100,
+    "KeyModifiers": "Alt",
+    "Keys": "Down"
+  },
+  {
+    "Name": "Amelie Debout",
+    "Height":  100,
+    "KeyModifiers": "Alt",
+    "Keys": "Up"
+  },
+  {
+    "Name": "Pascal Assis",
+    "Height":  100,
+    "KeyModifiers": "Control",
+    "Keys": "Up"
+  },
+  {
+    "Name": "Pascal Debout",
+    "Height":  100,
+    "KeyModifiers": "Control",
+    "Keys": "Down"
+  },
+]
