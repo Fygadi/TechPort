@@ -2,10 +2,18 @@
     x:Class="TechPortWinUI.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:TechPortWinUI.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:TechPortWinUI.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converter:BluetoothConnectionStatusToStringConverter x:Key="BluetoothConnectionStatusToStringConverter" />
+        <converter:BluetoothConnectionStatusToColorConverter x:Key="BluetoothConnectionStatusToColorConverter" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -65,18 +73,18 @@
                     Text="Height Preset" />
 
                 <ListView
-                    x:Name="MyCustumListViewTest"
+                    x:Name="PresetsListView"
                     Grid.Row="1"
                     AllowDrop="True"
                     CanReorderItems="True"
-                    DataContext="{Binding _presetModel}"
-                    ItemsSource="{Binding Presets}"
+                    DataContext="{x:Bind ViewModel.PresetsViewModel}"
+                    ItemsSource="{x:Bind ViewModel.PresetsViewModel.Presets, Mode=OneWay}"
                     SelectionMode="Single">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="BorderThickness" Value="0" />
                             <Setter Property="Margin" Value="20,5" />
-                            <Setter Property="Padding" Value="10,34" />
+                            <Setter Property="Padding" Value="10,14" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="Background" Value="#242325" />
                         </Style>
@@ -85,68 +93,39 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Button
-                                Margin="0"
-                                Padding="0"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left">
-
-                                <Button.ContextFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Edit" />
-                                        <MenuFlyoutItem Command="{Binding DeletPresetCommand}" Text="Delete" />
-                                    </MenuFlyout>
-                                </Button.ContextFlyout>
-                                <StackPanel Padding="25" Orientation="Horizontal">
-                                    <!--  Prest height value  -->
-                                    <StackPanel
-                                        Margin="0,0,22,0"
-                                        Padding="5,8"
-                                        VerticalAlignment="Center"
-                                        Background="#d9d9d9">
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            FontSize="18"
-                                            Foreground="Black"
-                                            Text="{Binding Height}" />
-                                    </StackPanel>
-
-                                    <!--  Preset Name  -->
+                            <StackPanel Padding="25" Orientation="Horizontal">
+                                <!--  Prest height value  -->
+                                <StackPanel
+                                    Margin="0,0,22,0"
+                                    Padding="5,8"
+                                    VerticalAlignment="Center"
+                                    Background="#d9d9d9">
                                     <TextBlock
                                         VerticalAlignment="Center"
-                                        FontSize="22"
-                                        Foreground="#d9d9d9"
-                                        Text="{Binding Name}" />
+                                        FontSize="18"
+                                        Foreground="Black"
+                                        Text="{Binding Height, Mode=OneWay}" />
                                 </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
 
-
-                    <!--  Preset Height 1  -->
-                    <!--
-                    <ListViewItem>
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel
-                                Margin="12,0,22,0"
-                                Padding="5,8"
-                                VerticalAlignment="Center"
-                                Background="#d9d9d9">
+                                <!--  Preset Name  -->
                                 <TextBlock
                                     VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="Black"
-                                    Text="82cm" />
+                                    FontSize="22"
+                                    Foreground="#d9d9d9"
+                                    Text="{Binding Name, Mode=OneWay}" />
+
+                                <StackPanel.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Edit" />
+                                        <MenuFlyoutItem
+                                            Command="{Binding DataContext.RemovePresetCommand, ElementName=PresetsListView}"
+                                            CommandParameter="{Binding}"
+                                            Text="Remove" />
+                                    </MenuFlyout>
+                                </StackPanel.ContextFlyout>
                             </StackPanel>
-
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="22"
-                                Foreground="#d9d9d9"
-                                Text="Victor Assis" />
-                        </StackPanel>
-                    </ListViewItem>-->
-
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </Grid>
 
@@ -173,14 +152,14 @@
                         Source="C:\Users\Fygadi\Downloads\Figma\computer-furniture-table.svg" />
 
                     <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="24" Text="Bureau a Victor" />
+                        <TextBlock FontSize="24" Text="{x:Bind ViewModel.DeskViewModel.ActiveDesk.Name, Mode=OneWay}" />
                         <StackPanel Orientation="Horizontal">
                             <Ellipse
                                 Width="12"
                                 Height="12"
                                 Margin="0,0,15,0"
-                                Fill="#6ccb5f" />
-                            <TextBlock Text=" Connected" />
+                                Fill="{x:Bind ViewModel.DeskViewModel.ActiveDesk.ConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToColorConverter}}" />
+                            <TextBlock Text="{x:Bind ViewModel.DeskViewModel.ActiveDesk.ConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToStringConverter}}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -212,26 +191,20 @@
 
                         <!--  Move Up  -->
                         <Button
-                            x:Name="MoveUpButton"
                             Width="78"
                             Height="78"
                             Margin="0,0,0,15"
                             Background="#d9d9d9"
-                            PointerCanceled="MoveUpButton_PointerCanceled"
-                            PointerPressed="MoveUpButton_PointerPressed"
-                            PointerReleased="MoveUpButton_PointerReleased">
+                            Command="{x:Bind ViewModel.DeskViewModel.MoveUpCommand}">
 
                             <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronUp.svg" Stretch="Uniform" />
                         </Button>
                         <!--  Move Down  -->
                         <Button
-                            x:Name="MoveDownButton"
                             Width="78"
                             Height="78"
                             Background="#d9d9d9"
-                            PointerCanceled="MoveDownButton_PointerCanceled"
-                            PointerPressed="MoveDownButton_PointerPressed"
-                            PointerReleased="MoveDownButton_PointerReleased">
+                            Command="{x:Bind ViewModel.DeskViewModel.MoveDownCommand}">
                             <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronDown.svg" Stretch="Uniform" />
                         </Button>
                     </StackPanel>

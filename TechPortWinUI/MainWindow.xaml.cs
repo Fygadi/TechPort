@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+﻿ using Microsoft.UI.Xaml;
 using TechPortWinUI.Helpers;
 
 using Windows.UI.ViewManagement;

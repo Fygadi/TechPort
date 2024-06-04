@@ -39,13 +39,6 @@ namespace TechPort
         {
             System.Console.Title = "TechPort";
 
-            #region Settings
-            string json = JsonConvert.SerializeObject(new DeskSettings(), Formatting.Indented);
-            string filePath = $"{AppDomain.CurrentDomain.BaseDirectory}deskSettings.json";
-            Console.WriteLine($"Settings file: {filePath}");
-            File.WriteAllText(filePath, json);
-            #endregion
-
             #region HotKeyManager
             //Used comme from https://stackoverflow.com/questions/3654787/global-hotkey-in-console-application
             HotKeyManager.RegisterHotKey(Keys.Up, KeyModifiers.Alt);

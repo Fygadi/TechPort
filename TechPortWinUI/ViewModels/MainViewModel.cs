@@ -1,14 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using TechPortWinUI.Models;
 
 namespace TechPortWinUI.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient
 {
-    #region Private members
-    public DeskViewModel _deskViewModel { get; set; }
+    #region Fields
+    private readonly PresetsViewModel _presetsViewModel = new ();
+    private readonly DeskViewModel _deskViewModel = new ();
     #endregion
+
+    #region Property
+    public PresetsViewModel PresetsViewModel { get => _presetsViewModel; }
+    public DeskViewModel DeskViewModel { get => _deskViewModel; }
+    #endregion
+
 
     #region Default constructor
     public MainViewModel() { }

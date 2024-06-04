@@ -1,73 +1,86 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechPortWinUI.Models;
+using System.Collections.ObjectModel;
+using System.Xml.Linq;
+using Windows.System;
 
 namespace TechPortWinUI.ViewModels
 {
-    public partial class PresetsViewModel
-    {
-        #region Default Constructor
-        public PresetsViewModel() { }
-        #endregion
-
-        #region Private members
-        public List<PresetItem> Presets { get; } = new()
-        {
-            new("Preset1", 78),
-            new("Preset2", 112),
-            new("Preset3", 100),
-            new("Preset4", 100),
-            new("Preset5", 100),
-        };
-        #endregion
-
-        #region Public methods
-        //TODO: Verify input for these methods
-        [RelayCommand]
-        public void AddPreset(PresetItem preset) => Presets.Add(preset);
-        [RelayCommand]
-        public void DeletPreset(PresetItem preset) => Presets.Remove(preset);
-        #endregion
-    }
-
     /// <summary>
-    /// Represents a single preset configuration for a desk, including its height and a name.
+    /// Represent a list of PresetItem
     /// </summary>
-    public partial class PresetItem
+    public partial class PresetsViewModel : ObservableObject
     {
-        #region public members
-        /// <summary>
-        /// Gets or sets the name of the preset.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the height of the desk in the preset.
-        /// </summary>
-        public short Height { get; set; }
+        #region Fields
+        private readonly ObservableCollection<PresetItem> _presets = CreatePresetsFromJson();
+        private const string _presetsConfigPath = $"E:\\TechPort\\PresetsConfig.json";
         #endregion
 
-        #region Default constructor
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PresetsModel"/> class with the specified height and name.
-        /// </summary>
-        /// <param name="height">The height of the desk in the preset.</param>
-        /// <param name="name">The name of the preset.</param>
-        public PresetItem(string name, short height)
+        #region Property
+        public ObservableCollection<PresetItem> Presets { get => _presets; }
+        #endregion
+
+        #region Constructor
+        public PresetsViewModel()
         {
-            Name = name;
-            Height = height;
+            //_presets = GetPresetsFromJson();
         }
         #endregion
 
-        #region Public methods
-        //TODO: Verify input for these methods
-        private static void ModifyPrestName(PresetItem preset, string newName) => preset.Name = newName;
-        private static void ModifyPrestHeight(PresetItem preset, short newHeight) => preset.Height = newHeight;
-        #endregion
+        [RelayCommand]
+        public void AddPreset(PresetItem preset) => _presets.Add(preset);
+        [RelayCommand]
+        public void RemovePreset(PresetItem preset) => _presets.Remove(preset);
+
+        private static ObservableCollection<PresetItem> CreatePresetsFromJson()
+        {
+            if (!File.Exists(_presetsConfigPath))
+                return new ObservableCollection<PresetItem>();
+
+            string json = File.ReadAllText(_presetsConfigPath);
+            ObservableCollection<PresetItem>? presets = JsonConvert.DeserializeObject<ObservableCollection<PresetItem>>(json);
+            return presets ?? new ObservableCollection<PresetItem>();
+        }
+        public async void SavePresetsToJson()
+        {
+            string finalJson = JsonConvert.SerializeObject(_presets, Formatting.Indented);
+            await File.WriteAllTextAsync(_presetsConfigPath, finalJson);
+        }
+
+        public IEnumerator<PresetItem> GetEnumerator() => _presets.GetEnumerator();
+
+        /// <summary>
+        /// Represent a single preset for a desk
+        /// </summary>
+        public class PresetItem
+        {
+            #region Property
+            public string Name { get; set; }
+            public short Height { get; set; }
+            public string Description { get; set; }
+            [JsonConverter(typeof(StringEnumConverter))]
+            public VirtualKey VirtualKey { get; set; }
+            [JsonConverter(typeof(StringEnumConverter))]
+            public VirtualKeyModifiers VirtualKeyModifiers { get; set; }
+            #endregion
+
+            #region Default constructor
+            public PresetItem(string name,
+                              short height,
+                              string description = "",
+                              VirtualKey virtualKey = VirtualKey.None,
+                              VirtualKeyModifiers virtualKeyModifiers = VirtualKeyModifiers.None)
+            {
+                Name = name;
+                Height = height;
+                Description = description;
+                VirtualKey = virtualKey;
+                VirtualKeyModifiers = virtualKeyModifiers;
+            }
+            #endregion
+        }
     }
 }

@@ -1,101 +1,103 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml.Media.Imaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechPortWinUI.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reflection;
+using TechPort.Desk;
+using TechPortWinUI.Desk;
 
 namespace TechPortWinUI.ViewModels
 {
-    public class DeskViewModel
+    public partial class DeskViewModel : ObservableObject
     {
-        public List<DeskItem> DeskItems;
-        public void AddDesk(string id) { }
-        public void RemoveDesk() { }
-    }
+        public ObservableCollection<IDesk> Desks { get => _desks; }
+        public IDesk ActiveDesk { get => _activeDesk; }
 
-    public partial class DeskItem
-    {
-        #region default constructor
-        public DeskItem()
+        //private string _desksConfigPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\DesksConfig.json";
+        //TODO: Update the Path of the file
+        private const string _desksConfigPath = $"E:\\TechPort\\DesksConfig.json";
+        private readonly ObservableCollection<IDesk> _desks = new();
+        private IDesk _activeDesk = new DefaultDesk();
+
+        #region Default constructor
+        public DeskViewModel()
         {
-            
+            //_ = CreateDesksFromJson();
         }
         #endregion
 
-        #region Public members
-        public const double _MIN_HEIGHT = 0.62;
-        public const double _MAX_HEIGHT = 1.27;
+        public void AddDesk(IDesk desk) => Desks.Add(desk);
+        public void RemoveDesk(IDesk desk) => Desks.Remove(desk);
 
-        public bool IsConnected;
-
-        public string ID;   
-        public string Name;
-        public short Height;
-        public short Speed;
-        public List<PresetItem> Presets { get; } = new()
-        {
-            new("Preset1", 78),
-            new("Preset2", 112),
-            new("Preset3", 100),
-            new("Preset4", 100),
-            new("Preset5", 100),
-        };
-        #endregion
-
-        #region Public methods
-        public BitmapImage Icon;
-
-        public void ConnectToDesk() { }
-        public void DisconectToDesk() { }
-
-        public void MoveUp() { }
-        public void MoveDown() { }
-        public void MoveToHeight() { }
-
-        //TODO: Verify input for these methods
         [RelayCommand]
-        public void AddPreset(PresetItem preset) => Presets.Add(preset);
+        public void MoveUp() => ActiveDesk.MoveUpAsync();
         [RelayCommand]
-        public void DeletPreset(PresetItem preset) => Presets.Remove(preset);
-        #endregion
+        public void MoveDown() => ActiveDesk.MoveDownAsync();
+        [RelayCommand]
+        public void MoveToHeight(short targetHeight) => ActiveDesk.MoveToHeightAsync(targetHeight);
 
-        /// <summary>
-        /// Represents a single preset configuration for a desk, including its height and a name.
-        /// </summary>
-        public class PresetItem
+        private void SaveDesksToJson()
         {
-            #region public members
-            /// <summary>
-            /// Gets or sets the name of the preset.
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
-            /// Gets or sets the height of the desk in the preset.
-            /// </summary>
-            public short Height { get; set; }
-            #endregion
+            var deskDataList = new List<object>();
 
-            #region Default constructor
-            /// <summary>
-            /// Initializes a new instance of the <see cref="PresetsModel"/> class with the specified height and name.
-            /// </summary>
-            /// <param name="height">The height of the desk in the preset.</param>
-            /// <param name="name">The name of the preset.</param>
-            public PresetItem(string name, short height)
+            foreach (var desk in Desks)
             {
-                Name = name;
-                Height = height;
+                var deskData = new
+                {
+                    TypeFullName = desk.GetType().FullName,
+                    Id = desk.DeviceId
+                };
+                deskDataList.Add(deskData);
             }
-            #endregion
+            var finalJson = JsonConvert.SerializeObject(deskDataList, Formatting.Indented);
+            File.WriteAllText(_desksConfigPath, finalJson);
+        }
+        private async Task CreateDesksFromJson()
+        {
+            try
+            {
+                if (!File.Exists(_desksConfigPath))
+                    return;
 
-            #region Public methods
-            //TODO: Verify input for these methods
-            private void ModifyPrestName(string newName) => this.Name = newName;
-            private void ModifyPrestHeight(short newHeight) => this.Height = newHeight;
-            #endregion
+                string json = await File.ReadAllTextAsync(_desksConfigPath);
+                List<dynamic>? desksData = JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+                if (desksData == null)
+                    return;
+
+                foreach (var deskData in desksData)
+                {
+                    string typeFullName = deskData.TypeFullName;
+                    string id = deskData.Id;
+
+                    //IDesk result = await (Task<IDesk>)Type.GetType(typeFullName).GetMethod(nameof(IDesk.CreateAsync)).Invoke(null, new object[] { id });
+
+                    try
+                    {
+                        Type? deskType = Type.GetType(typeFullName);
+                        MethodInfo? methodCreateAsync = deskType?.GetMethod(nameof(IDesk.CreateAsync));
+                        var result = methodCreateAsync?.Invoke(null, new object[] { id });
+                        var a = await (Task<IDesk>)result;
+
+                        //IDesk result = await (Task<IDesk>)Type.GetType(typeFullName).GetMethod(nameof(IDesk.CreateAsync)).Invoke(null, new object[] { id });
+
+
+                        //_desks.Clear();
+                        //_desks.Add(result);
+
+                        //if (_activeDesk == null)
+                        //    _activeDesk = result;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }
