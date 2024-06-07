@@ -1,49 +1,19 @@
-﻿using System.Net;
-using TechPortWinUI.Desk;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Net;
 using TechPortWinUI.Helpers;
-using TechPortWinUI.ViewModels;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace TechPort.Desk;
-public class IdasenDesk : IDesk
+namespace TechPortWinUI.Desk;
+public class IdasenDesk : BaseDesk, IDesk
 {
     #region Field
-    readonly BluetoothLEDevice _device;
-
-    private short _minHeight = 620;
-    private short _maxHeight = 1270;
-    private short _height;
-    private short _speed = 0;
-    private readonly MovementStatus _currentMovementStatus = new();
-
     //short.MaxValue means it has reach the desired height
     private short _targetHeight = short.MaxValue;
 
     private readonly Dictionary<GattDeviceService, List<GattCharacteristic>> _gattServiceAndCharacteristics;
-    #endregion
-    
-    #region Property
-    public short MinHeight { get => _minHeight; set => _minHeight = value; }
-    public short MaxHeight { get => _maxHeight; set => _maxHeight = value; }
-    public short Height { get => _height; }
-    public short Speed { get => _speed; }
-    public MovementStatus CurrentMovementStatus { get => _currentMovementStatus;}
-
-    public BluetoothLEAppearance Appearance { get => _device.Appearance; }
-    public ulong BluetoothAddress { get => _device.BluetoothAddress; }
-    public BluetoothAddressType BluetoothAddressType { get => _device.BluetoothAddressType; }
-    public BluetoothDeviceId BluetoothDeviceId { get => _device.BluetoothDeviceId; }
-    public BluetoothConnectionStatus ConnectionStatus { get => _device.ConnectionStatus; }
-    public DeviceAccessInformation DeviceAccessInformation { get => _device.DeviceAccessInformation; }
-    public string DeviceId { get => _device.DeviceId; }
-    public DeviceInformation DeviceInformation { get => _device.DeviceInformation; }
-    public IReadOnlyList<GattDeviceService> GattServices => throw new NotImplementedException();
-    public string Name { get => _device.Name;}
-    public bool WasSecureConnectionUsedForPairing { get => _device.WasSecureConnectionUsedForPairing; }
     #endregion
 
     #region Characteristics
@@ -78,16 +48,20 @@ public class IdasenDesk : IDesk
     #endregion
 
     #region Constructor
-    private IdasenDesk(BluetoothLEDevice device, Dictionary<GattDeviceService, List<GattCharacteristic>> gattServiceAndCharacteristics)
+    private IdasenDesk(BluetoothLEDevice device,
+                       Dictionary<GattDeviceService,
+                       List<GattCharacteristic>> gattServiceAndCharacteristics): base(
+                           device,
+                           0,
+                           5192)
     {
         //Initialise variable
-        this._device = device;
         _gattServiceAndCharacteristics = gattServiceAndCharacteristics;
 
         //Register to device event
-        _device.ConnectionStatusChanged += ConnectionStatusChanged;
-        _device.GattServicesChanged += GattServicesChanged;
-        _device.NameChanged += NameChanged;
+        Device.ConnectionStatusChanged += ConnectionStatusChanged;
+        Device.GattServicesChanged += GattServicesChanged;
+        Device.NameChanged += NameChanged;
 
         //Register to characteristics notification
         GetCharacteristicByGuid(_UUID_HEIGHT).ValueChanged += CharacteristicHeight_ValueChangedAsync;
@@ -96,7 +70,7 @@ public class IdasenDesk : IDesk
 
     //use a createAsync method since the constructor cant use an async
     //TODO make sure there isn't 2 desk with the same id (use a static list)
-    public static async Task<IdasenDesk?> CreateAsync(string deskId)
+    public static async Task<IdasenDesk> CreateAsync(string deskId)
     {
         var device = await BluetoothLeHelper.ConnectDeviceAsync(deskId);
         var gattServicesAndCharacteristics = await BluetoothLeHelper.GetServicesAndCharacteristicsFromDevice(device);
@@ -104,8 +78,9 @@ public class IdasenDesk : IDesk
         var idasenDesk = new IdasenDesk(device, gattServicesAndCharacteristics);
         (short speed, short height) = await idasenDesk.GetSpeedAndHeightAsync();
 
-        idasenDesk._speed = speed;
-        idasenDesk._height = height;
+        //TODO FIX THIS ITS CAUSING AN UPDATE
+        idasenDesk.Speed = speed;
+        idasenDesk.Height = height;
 
         return idasenDesk;
     }
@@ -132,16 +107,16 @@ public class IdasenDesk : IDesk
     {
         DataReader reader = DataReader.FromBuffer(args.CharacteristicValue);
         uint data = (uint)IPAddress.NetworkToHostOrder((int)reader.ReadUInt32());
-        (_speed, _height) = DataToSpeedAndHeightConverter(data);
+        (Speed, Height) = DataToSpeedAndHeightConverter(data);
 
         // Check if the current height of the desk is within an acceptable proximity to the desired height
-        if (Math.Abs(_height - _targetHeight) <= 10)
+        if (Math.Abs(Height - _targetHeight) <= 10)
         {
             // If the difference between the current height and the target height is within a small threshold (e.g., 10 units),
             // set the target height to short.MaxValue to indicate that the desk has reached the desired height and does not need to move further.
             _targetHeight = short.MaxValue;
 
-            if (await StopAsync() != GattCommunicationStatus.Success)
+            if (await StopMovingAsync() != GattCommunicationStatus.Success)
                 throw new NotImplementedException();
         }
     }
@@ -152,17 +127,17 @@ public class IdasenDesk : IDesk
     #endregion
 
     #region Command methods
-    public async Task<GattCommunicationStatus> MoveUpAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_UP);
-    public async Task<GattCommunicationStatus> MoveDownAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_DOWN);
-    public async Task<GattCommunicationStatus> StopAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_STOP);
-    public async void MoveToHeightAsync(short targetHeight)
+    public override async  Task<GattCommunicationStatus> MoveUpAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_UP);
+    public override async Task<GattCommunicationStatus> MoveDownAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_DOWN);
+    public override async Task<GattCommunicationStatus> StopMovingAsync() => await WriteAsync(_UUID_COMMAND, _COMMAND_STOP);
+    public override async void MoveToHeightAsync(short targetHeight)
     {
         //TODO: Check for Condition and avoid multiple instance
         _targetHeight = targetHeight;
 
         while (_targetHeight != short.MaxValue)
         {
-            if (_height < _targetHeight)
+            if (Height < _targetHeight)
                 await MoveUpAsync();
             else
                 await MoveDownAsync();
@@ -236,7 +211,7 @@ public class IdasenDesk : IDesk
     /// </summary>
     ~IdasenDesk()
     {
-        _device.Dispose();
+        Device.Dispose();
     }
     #endregion
 }

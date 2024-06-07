@@ -1,26 +1,28 @@
-﻿using TechPortWinUI.Desk;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
+﻿using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
-using TechPortWinUI.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
+using TechPortWinUI.Helpers;
 
-namespace TechPort.Desk;
+namespace TechPortWinUI.Desk;
 /// <summary>
 /// Represent a Desk
 /// </summary>
-public interface IDesk
+public partial interface IDesk
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
     short MinHeight { get; set; }
     short MaxHeight { get; set; }
     short Height { get; }
     short Speed { get; }
-    MovementStatus CurrentMovementStatus { get; }
+    MovementStatus MovementStatus { get; }
 
     BluetoothLEAppearance Appearance { get;}
     ulong BluetoothAddress { get; }
     BluetoothAddressType BluetoothAddressType { get; }
     BluetoothDeviceId BluetoothDeviceId { get; }
-    BluetoothConnectionStatus ConnectionStatus { get; }
+    BluetoothConnectionStatus BluetoothConnectionStatus { get; }
     DeviceAccessInformation DeviceAccessInformation { get; }
     string DeviceId { get; }
     DeviceInformation DeviceInformation { get; }
@@ -28,9 +30,11 @@ public interface IDesk
     string Name { get; }
     bool WasSecureConnectionUsedForPairing{ get; }
 
-    static Task<IDesk>? CreateAsync(string deskId) => throw new NotImplementedException();
+    static async Task<IdasenDesk> CreateAsync(string deskId) => throw new NotImplementedException();
     Task<GattCommunicationStatus> MoveUpAsync();
     Task<GattCommunicationStatus> MoveDownAsync();
-    Task<GattCommunicationStatus> StopAsync();
+    Task<GattCommunicationStatus> StopMovingAsync();
     void MoveToHeightAsync(short targetHeight);
+
+    void UpdateProperty();
 }

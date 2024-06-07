@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechPort.Desk;
+﻿using System.ComponentModel;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
@@ -12,7 +7,9 @@ namespace TechPortWinUI.Desk
 {
     internal class DefaultDesk : IDesk
     {
-        #pragma warning disable CS8603 // Possible null reference return.
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+#pragma warning disable CS8603 // Possible null reference return.
         public short MinHeight { get => -1; set { } }
         public short MaxHeight { get => -1; set { } }
 
@@ -20,7 +17,7 @@ namespace TechPortWinUI.Desk
 
         public short Speed => -1;
 
-        public MovementStatus CurrentMovementStatus => MovementStatus.Idle;
+        public MovementStatus MovementStatus => MovementStatus.Idle;
 
         public BluetoothLEAppearance Appearance => null;
 
@@ -30,7 +27,7 @@ namespace TechPortWinUI.Desk
 
         public BluetoothDeviceId BluetoothDeviceId => null;
 
-        public BluetoothConnectionStatus ConnectionStatus => BluetoothConnectionStatus.Disconnected;
+        public BluetoothConnectionStatus BluetoothConnectionStatus => BluetoothConnectionStatus.Disconnected;
 
         public DeviceAccessInformation DeviceAccessInformation => null;
 
@@ -57,9 +54,11 @@ namespace TechPortWinUI.Desk
             throw new NotImplementedException();
         }
 
-        public Task<GattCommunicationStatus> StopAsync()
+        public Task<GattCommunicationStatus> StopMovingAsync()
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateProperty() { }
     }
 }

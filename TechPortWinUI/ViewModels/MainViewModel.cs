@@ -4,18 +4,11 @@ namespace TechPortWinUI.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient
 {
-    #region Fields
-    private readonly PresetsViewModel _presetsViewModel = new ();
     private readonly DeskViewModel _deskViewModel = new ();
-    #endregion
-
-    #region Property
-    public PresetsViewModel PresetsViewModel { get => _presetsViewModel; }
     public DeskViewModel DeskViewModel { get => _deskViewModel; }
-    #endregion
 
+    private readonly PresetsViewModel _presetsViewModel = new ();
+    public PresetsViewModel PresetsViewModel { get => _presetsViewModel; }
 
-    #region Default constructor
     public MainViewModel() { }
-    #endregion
 }

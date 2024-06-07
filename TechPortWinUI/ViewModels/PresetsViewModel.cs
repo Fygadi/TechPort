@@ -12,7 +12,7 @@ namespace TechPortWinUI.ViewModels
     /// <summary>
     /// Represent a list of PresetItem
     /// </summary>
-    public partial class PresetsViewModel : ObservableObject
+    public partial class PresetsViewModel : ObservableRecipient
     {
         #region Fields
         private readonly ObservableCollection<PresetItem> _presets = CreatePresetsFromJson();

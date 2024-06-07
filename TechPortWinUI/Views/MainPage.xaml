@@ -5,6 +5,7 @@
     xmlns:converter="using:TechPortWinUI.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="using:System"
     xmlns:viewmodels="using:TechPortWinUI.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
@@ -143,6 +144,7 @@
                     Padding="20"
                     VerticalAlignment="Top"
                     Background="#1d1d1d"
+                    DataContext="{}"
                     Orientation="Horizontal">
                     <Image
                         Height="48"
@@ -151,15 +153,15 @@
                         VerticalAlignment="Top"
                         Source="C:\Users\Fygadi\Downloads\Figma\computer-furniture-table.svg" />
 
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel x:Name="ttt" Orientation="Vertical">
                         <TextBlock FontSize="24" Text="{x:Bind ViewModel.DeskViewModel.ActiveDesk.Name, Mode=OneWay}" />
                         <StackPanel Orientation="Horizontal">
                             <Ellipse
                                 Width="12"
                                 Height="12"
                                 Margin="0,0,15,0"
-                                Fill="{x:Bind ViewModel.DeskViewModel.ActiveDesk.ConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToColorConverter}}" />
-                            <TextBlock Text="{x:Bind ViewModel.DeskViewModel.ActiveDesk.ConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToStringConverter}}" />
+                                Fill="{x:Bind ViewModel.DeskViewModel.ActiveDesk.BluetoothConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToColorConverter}}" />
+                            <TextBlock Text="{x:Bind ViewModel.DeskViewModel.ActiveDesk.BluetoothConnectionStatus, Mode=OneWay, Converter={StaticResource BluetoothConnectionStatusToStringConverter}}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -179,9 +181,8 @@
                         Grid.Column="0"
                         Margin="0,0,35,0"
                         VerticalAlignment="Center"
-                        FontSize="24">
-                        Height:<LineBreak />
-                        122cm</TextBlock>
+                        FontSize="24"
+                        Text="{x:Bind sys:String.Format(x:Null, 'Height: {0} cm', ViewModel.DeskViewModel.ActiveDesk.Height)}" />
 
                     <StackPanel
                         Grid.Row="1"
@@ -195,8 +196,8 @@
                             Height="78"
                             Margin="0,0,0,15"
                             Background="#d9d9d9"
+                            ClickMode="Press"
                             Command="{x:Bind ViewModel.DeskViewModel.MoveUpCommand}">
-
                             <Image Source="C:\Users\Fygadi\Downloads\Figma\ChevronUp.svg" Stretch="Uniform" />
                         </Button>
                         <!--  Move Down  -->
